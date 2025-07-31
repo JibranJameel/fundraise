@@ -18,7 +18,7 @@
 
   <section class="content">
     <h2>Urgent: Sandwich Needed!</h2>
-    <p>He hasn’t eaten a sandwich in <strong>over 36 minutes</strong>.</p>
+    <p>He hasn’t eaten a sandwich in <strong id="timer">36 minutes</strong>.</p>
     <p>Every moment without mayo is a tragedy. With just <strong>one click</strong>, you can help him taste hope (and cheese).</p>
     <p><em>Be the hero he kneads. Donate now and let him ketchup to life.</em></p>
 
@@ -32,6 +32,22 @@
   <footer>
     © 2025 Ocean Bakery Fundraiser – Powered by Bread, Love, and the Internet
   </footer>
+
+  <script>
+    // Set the start time to 36 minutes ago
+    const startTime = new Date(Date.now() - 36 * 60 * 1000);
+
+    function updateTimer() {
+      const now = new Date();
+      const diff = now - startTime;
+      const minutes = Math.floor(diff / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+      document.getElementById("timer").textContent = `${minutes} minutes and ${seconds.toString().padStart(2, '0')} seconds`;
+    }
+
+    updateTimer(); // initial run
+    setInterval(updateTimer, 1000); // update every second
+  </script>
 
 </body>
 </html>
