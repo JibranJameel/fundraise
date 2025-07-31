@@ -10,6 +10,7 @@
 
   <header>
     🥪 Ocean Bakery Sandwich Fund
+    <button id="themeToggleBtn" class="theme-toggle-btn">🌓</button>
   </header>
 
   <section class="hero">
@@ -18,7 +19,14 @@
 
   <section class="content">
     <h2>Urgent: Sandwich Needed!</h2>
-    <p>He hasn’t eaten a sandwich in <strong id="timer">36 minutes</strong>.</p>
+    <p>
+      He hasn’t eaten a sandwich in <strong>over
+        <span class="time-unit" id="days">00</span> days
+        <span class="time-unit" id="hours">00</span> hours
+        <span class="time-unit" id="minutes">00</span> minutes
+        <span class="time-unit" id="seconds">00</span> seconds
+      </strong>.
+    </p>
     <p>Every moment without mayo is a tragedy. With just <strong>one click</strong>, you can help him taste hope (and cheese).</p>
     <p><em>Be the hero he kneads. Donate now and let him ketchup to life.</em></p>
 
@@ -34,36 +42,65 @@
   </footer>
 
   <script>
-  const createdAt = new Date("2025-07-30T17:00:00"); // replace with your actual creation date/time
-  const targetElement = document.querySelector(".content p strong");
+    // Timer with animated digital-style update
+    const createdAt = new Date("2025-07-31T15:35:00");
 
-  function updateTimeElapsed() {
-    const now = new Date();
-    const diff = now - createdAt;
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
 
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    let displayText = "";
-
-    if (days > 0) {
-      displayText = `${days} day${days > 1 ? "s" : ""}`;
-      if (hours % 24 > 0) displayText += ` and ${hours % 24} hour${hours % 24 > 1 ? "s" : ""}`;
-    } else if (hours > 0) {
-      displayText = `${hours} hour${hours > 1 ? "s" : ""}`;
-      if (minutes % 60 > 0) displayText += ` and ${minutes % 60} minute${minutes % 60 > 1 ? "s" : ""}`;
-    } else {
-      displayText = `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+    function pad(num) {
+      return String(num).padStart(2, '0');
     }
 
-    targetElement.textContent = `over ${displayText}`;
-  }
+    function animateChange(el, newVal) {
+      if (el.textContent !== newVal) {
+        el.classList.remove("tick");
+        void el.offsetWidth; // Force reflow to restart animation
+        el.textContent = newVal;
+        el.classList.add("tick");
+      }
+    }
 
-  updateTimeElapsed();
-  setInterval(updateTimeElapsed, 60000); // update every minute
-</script>
+    function updateTimeElapsed() {
+      const now = new Date();
+      const diff = now - createdAt;
 
+      const totalSeconds = Math.floor(diff / 1000);
+      const seconds = totalSeconds % 60;
+      const totalMinutes = Math.floor(totalSeconds / 60);
+      const minutes = totalMinutes % 60;
+      const totalHours = Math.floor(totalMinutes / 60);
+      const hours = totalHours % 24;
+      const days = Math.floor(totalHours / 24);
+
+      animateChange(daysEl, pad(days));
+      animateChange(hoursEl, pad(hours));
+      animateChange(minutesEl, pad(minutes));
+      animateChange(secondsEl, pad(seconds));
+    }
+
+    updateTimeElapsed();
+    setInterval(updateTimeElapsed, 1000);
+
+    // Theme toggle logic
+    const toggleBtn = document.getElementById('themeToggleBtn');
+    let currentTheme = localStorage.getItem('theme') || 'light';
+
+    function applyTheme(theme) {
+      document.body.classList.remove('light-theme', 'dark-theme');
+      document.body.classList.add(`${theme}-theme`);
+      localStorage.setItem('theme', theme);
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+      applyTheme(currentTheme);
+    });
+
+    applyTheme(currentTheme);
+  </script>
 
 </body>
 </html>
