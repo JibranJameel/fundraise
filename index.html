@@ -64,22 +64,26 @@
     }
 
     function updateTimeElapsed() {
-      const now = new Date();
-      const diff = now - createdAt;
+  const now = new Date();
+  let diff = now - createdAt;
 
-      const totalSeconds = Math.floor(diff / 1000);
-      const seconds = totalSeconds % 60;
-      const totalMinutes = Math.floor(totalSeconds / 60);
-      const minutes = totalMinutes % 60;
-      const totalHours = Math.floor(totalMinutes / 60);
-      const hours = totalHours % 24;
-      const days = Math.floor(totalHours / 24);
+  // Prevent negative time
+  if (diff < 0) diff = 0;
 
-      animateChange(daysEl, pad(days));
-      animateChange(hoursEl, pad(hours));
-      animateChange(minutesEl, pad(minutes));
-      animateChange(secondsEl, pad(seconds));
-    }
+  const totalSeconds = Math.floor(diff / 1000);
+  const seconds = totalSeconds % 60;
+  const totalMinutes = Math.floor(totalSeconds / 60);
+  const minutes = totalMinutes % 60;
+  const totalHours = Math.floor(totalMinutes / 60);
+  const hours = totalHours % 24;
+  const days = Math.floor(totalHours / 24);
+
+  animateChange(daysEl, pad(days));
+  animateChange(hoursEl, pad(hours));
+  animateChange(minutesEl, pad(minutes));
+  animateChange(secondsEl, pad(seconds));
+}
+
 
     updateTimeElapsed();
     setInterval(updateTimeElapsed, 1000);
