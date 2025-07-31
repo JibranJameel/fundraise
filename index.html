@@ -34,20 +34,36 @@
   </footer>
 
   <script>
-    // Set the start time to 36 minutes ago
-    const startTime = new Date(Date.now() - 36 * 60 * 1000);
+  const createdAt = new Date("2025-07-30T17:00:00"); // replace with your actual creation date/time
+  const targetElement = document.querySelector(".content p strong");
 
-    function updateTimer() {
-      const now = new Date();
-      const diff = now - startTime;
-      const minutes = Math.floor(diff / 60000);
-      const seconds = Math.floor((diff % 60000) / 1000);
-      document.getElementById("timer").textContent = `${minutes} minutes and ${seconds.toString().padStart(2, '0')} seconds`;
+  function updateTimeElapsed() {
+    const now = new Date();
+    const diff = now - createdAt;
+
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    let displayText = "";
+
+    if (days > 0) {
+      displayText = `${days} day${days > 1 ? "s" : ""}`;
+      if (hours % 24 > 0) displayText += ` and ${hours % 24} hour${hours % 24 > 1 ? "s" : ""}`;
+    } else if (hours > 0) {
+      displayText = `${hours} hour${hours > 1 ? "s" : ""}`;
+      if (minutes % 60 > 0) displayText += ` and ${minutes % 60} minute${minutes % 60 > 1 ? "s" : ""}`;
+    } else {
+      displayText = `${minutes} minute${minutes !== 1 ? "s" : ""}`;
     }
 
-    updateTimer(); // initial run
-    setInterval(updateTimer, 1000); // update every second
-  </script>
+    targetElement.textContent = `over ${displayText}`;
+  }
+
+  updateTimeElapsed();
+  setInterval(updateTimeElapsed, 60000); // update every minute
+</script>
+
 
 </body>
 </html>
